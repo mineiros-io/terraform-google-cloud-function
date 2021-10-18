@@ -139,6 +139,20 @@ variable "vpc_connector_egress_settings" {
   default     = "PRIVATE_RANGES_ONLY"
 }
 
+## IAM
+
+variable "iam" {
+  description = "(Optional) A list of IAM access."
+  type        = any
+  default     = []
+}
+
+variable "policy_bindings" {
+  description = "(Optional) A list of IAM policy bindings."
+  type        = any
+  default     = null
+}
+
 # ------------------------------------------------------------------------------
 # MODULE CONFIGURATION PARAMETERS
 # These variables are used to configure the module.
