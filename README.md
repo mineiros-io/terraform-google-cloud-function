@@ -38,6 +38,9 @@ secure, and production-grade cloud infrastructure.
 A [Terraform] base module for creating a `google_cloudfunctions_function` resource that creates a new Cloud Function.
 
 In addition to creation of resource this module creates an accompanying `google_storage_bucket_object` for archiving.
+and supports additional features of the following modules:
+
+- [mineiros-io/terraform-google-cloud-function-iam](https://github.com/mineiros-io/terraform-google-cloud-function-iam)
 
 ## Getting Started
 
@@ -47,11 +50,11 @@ Most basic usage just setting required arguments:
 module "terraform-google-cloud-function" {
   source = "github.com/mineiros-io/terraform-google-cloud-function.git?ref=v0.1.0"
 
-  project        = google_cloudfunctions_function.function.project
-  region         = google_cloudfunctions_function.function.region
-  name           = "function-test"
-  description    = "My function"
-  runtime        = "nodejs14"
+  project     = google_cloudfunctions_function.function.project
+  region      = google_cloudfunctions_function.function.region
+  name        = "function-test"
+  description = "My function"
+  runtime     = "nodejs14"
 }
 ```
 
@@ -142,6 +145,7 @@ See [variables.tf] and [examples/] for details and use-cases.
 - **`available_memory_mb`**: _(Optional `number`)_
 
   Memory (in MB), available to the function. Possible values include `128`, `256`, `512`, `1024`, etc.
+  
   Default is `128`.
 
 - **`max_instances`**: _(Optional `number`)_
@@ -151,6 +155,7 @@ See [variables.tf] and [examples/] for details and use-cases.
 - **`ingress_settings`**: _(Optional `string`)_
 
   String value that controls what traffic can reach the function. Allowed values are `ALLOW_ALL`, `ALLOW_INTERNAL_AND_GCLB` and `ALLOW_INTERNAL_ONLY`. Changes to this field will recreate the cloud function.
+  
   Default is `ALLOW_INTERNAL_ONLY`.
 
 - **`labels`**: _(Optional `map(string)`)_
@@ -165,6 +170,7 @@ See [variables.tf] and [examples/] for details and use-cases.
 - **`environment_variables`**: _(Optional `map(string)`)_
 
   A set of key/value environment variable pairs to assign to the function.
+  
   Default is `{}`.
 
 - **`build_environment_variables`**: _(Optional `map(string)`)_
@@ -190,15 +196,15 @@ See [variables.tf] and [examples/] for details and use-cases.
 
   ```hcl
   iam = [{
-    role = "roles/secretmanager.admin"
-    members = ["user:member@example.com"]
+    role          = "roles/secretmanager.admin"
+    members       = ["user:member@example.com"]
     authoritative = false
   }]
   ```
 
   Each `iam` object accepts the following fields:
 
-  - **`members`**: **_(Required `list(string)`)_**
+  - **`members`**: _(Optional `set(string)`)_
 
     Identities that will be granted the privilege in role. Each entry can have one of the following values:
     - `allUsers`: A special identifier that represents anyone who is on the internet; with or without a Google account.
@@ -207,10 +213,13 @@ See [variables.tf] and [examples/] for details and use-cases.
     - `serviceAccount:{emailid}`: An email address that represents a service account. For example, my-other-app@appspot.gserviceaccount.com.
     - `group:{emailid}`: An email address that represents a Google group. For example, admins@example.com.
     - `domain:{domain}`: A G Suite domain (primary, instead of alias) name that represents all the users of that domain. For example, google.com or example.com.
+    - `projectOwner:projectid`: Owners of the given project. For example, `projectOwner:my-example-project`
+    - `projectEditor:projectid`: Editors of the given project. For example, `projectEditor:my-example-project`
+    - `projectViewer:projectid`: Viewers of the given project. For example, `projectViewer:my-example-project`
 
     Default is `[]`.
 
-  - **`role`**: **_(Required `string`)_**
+  - **`role`**: _(Optional `string`)_
 
     The role that should be applied. Note that custom roles must be of the format `[projects|organizations]/{parent-name}/roles/{role-name}`.
 
@@ -228,8 +237,8 @@ See [variables.tf] and [examples/] for details and use-cases.
 
   ```hcl
   policy_bindings = [{
-    role    = "roles/secretmanager.admin"
-    members = ["user:member@example.com"]
+    role      = "roles/secretmanager.admin"
+    members   = ["user:member@example.com"]
     condition = {
       title       = "expires_after_2021_12_31"
       description = "Expiring at midnight of 2021-12-31"
@@ -244,7 +253,7 @@ See [variables.tf] and [examples/] for details and use-cases.
 
     The role that should be applied.
 
-  - **`members`**: **_(Required `string`)_**
+  - **`members`**: _(Optional `set(string)`)_
 
     Identities that will be granted the privilege in `role`.
 
@@ -301,11 +310,15 @@ The following attributes are exported in the outputs of the module:
 
 - **`cloud_function`**
 
-  All outputs of the created `\google_cloudfunctions_function\` resource.
+  All outputs of the created `google_cloudfunctions_function` resource.
 
 - **`bucket_object`**
 
-  All outputs of the created `\google_storage_bucket_object.archive\` resource.
+  All outputs of the created `google_storage_bucket_object.archive` resource.
+
+- **`iam`**
+
+  The `iam` resource objects that define the access to the cloud function.
 
 ## External Documentation
 
