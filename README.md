@@ -1,19 +1,22 @@
-[<img src="https://raw.githubusercontent.com/mineiros-io/brand/3bffd30e8bdbbde32c143e2650b2faa55f1df3ea/mineiros-primary-logo.svg" width="400"/>][homepage]
+[<img src="https://raw.githubusercontent.com/mineiros-io/brand/3bffd30e8bdbbde32c143e2650b2faa55f1df3ea/mineiros-primary-logo.svg" width="400"/>](https://mineiros.io/?ref=terraform-google-cloud-function)
 
-[![Terraform Version][badge-terraform]][releases-terraform]
-[![Google Provider Version][badge-tf-gcp]][releases-google-provider]
-[![Join Slack][badge-slack]][slack]
+[![Build Status](https://github.com/mineiros-io/terraform-google-cloud-function/workflows/Tests/badge.svg)](https://github.com/mineiros-io/terraform-google-cloud-function/actions)
+[![GitHub tag (latest SemVer)](https://img.shields.io/github/v/tag/mineiros-io/terraform-google-cloud-function.svg?label=latest&sort=semver)](https://github.com/mineiros-io/terraform-google-cloud-function/releases)
+[![Terraform Version](https://img.shields.io/badge/Terraform-1.x-623CE4.svg?logo=terraform)](https://github.com/hashicorp/terraform/releases)
+[![Google Provider Version](https://img.shields.io/badge/google-4-1A73E8.svg?logo=terraform)](https://github.com/terraform-providers/terraform-provider-google/releases)
+[![Join Slack](https://img.shields.io/badge/slack-@mineiros--community-f32752.svg?logo=slack)](https://mineiros.io/slack)
 
 # terraform-google-cloud-function
 
 A [Terraform](https://www.terraform.io) module to create a [Google Cloud Function](https://cloud.google.com/functions/docs) on [Google Cloud Services (GCP)](https://cloud.google.com/).
 
 **_This module supports Terraform version 1
-and is compatible with the Terraform Google Provider version 3._**
+and is compatible with the Terraform Google Provider version 4._**
 
 This module is part of our Infrastructure as Code (IaC) framework
 that enables our users and customers to easily deploy and manage reusable,
 secure, and production-grade cloud infrastructure.
+
 
 - [Module Features](#module-features)
 - [Getting Started](#getting-started)
@@ -23,8 +26,10 @@ secure, and production-grade cloud infrastructure.
     - [Main Resource Configuration](#main-resource-configuration)
     - [Extended Resource Configuration](#extended-resource-configuration)
       - [Google storage archive bucket object](#google-storage-archive-bucket-object)
-- [Module Attributes Reference](#module-attributes-reference)
+- [Module Outputs](#module-outputs)
 - [External Documentation](#external-documentation)
+  - [Google Documentation](#google-documentation)
+  - [Terraform Google Provider Documentation](#terraform-google-provider-documentation)
 - [Module Versioning](#module-versioning)
   - [Backwards compatibility in `0.0.z` and `0.y.z` version](#backwards-compatibility-in-00z-and-0yz-version)
 - [About Mineiros](#about-mineiros)
@@ -66,16 +71,18 @@ See [variables.tf] and [examples/] for details and use-cases.
 
 #### Module Configuration
 
-- **`module_enabled`**: _(Optional `bool`)_
+- [**`module_enabled`**](#var-module_enabled): *(Optional `bool`)*<a name="var-module_enabled"></a>
 
   Specifies whether resources in the module will be created.
+
   Default is `true`.
 
-- **`module_depends_on`**: _(Optional `list(dependencies)`)_
+- [**`module_depends_on`**](#var-module_depends_on): *(Optional `list(dependencies)`)*<a name="var-module_depends_on"></a>
 
   A list of dependencies. Any object can be _assigned_ to this list to define a hidden external dependency.
 
   Example:
+
   ```hcl
   module_depends_on = [
     google_network.network
@@ -84,115 +91,136 @@ See [variables.tf] and [examples/] for details and use-cases.
 
 #### Main Resource Configuration
 
-- **`region`**: **_(Required `string`)_**
+- [**`region`**](#var-region): *(**Required** `string`)*<a name="var-region"></a>
 
   The region where the Cloud Function will be created.
 
-- **`project`**: **_(Required `string`)_**
+- [**`project`**](#var-project): *(**Required** `string`)*<a name="var-project"></a>
 
   The ID of the project in which the resources belong.
 
-- **`name`**: **_(Required `string`)_**
+- [**`name`**](#var-name): *(**Required** `string`)*<a name="var-name"></a>
 
   A user-defined name of the function. The function names must be unique globally.
 
-- **`runtime`**: **_(Required `string`)_**
+- [**`runtime`**](#var-runtime): *(**Required** `string`)*<a name="var-runtime"></a>
 
   The runtime in which the function is going to run. Eg. `nodejs10`, `nodejs12`, `nodejs14`, `python37`, `python38`, `python39`, `dotnet3`, `go113`, `java11`, `ruby27`, etc.
 
-- **`source_repository`**: _(Optional `object({ url = string })`)_
+- [**`source_repository`**](#var-source_repository): *(Optional `object(source_repository)`)*<a name="var-source_repository"></a>
 
   Represents parameters related to source repository where a function is hosted. Cannot be set alongside `source_archive`. For details please see <https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/cloudfunctions_function#source_repository>
 
-- **`entry_point`**: _(Optional `string`)_
+  The object accepts the following attributes:
+
+  - [**`url`**](#attr-url-source_repository): *(**Required** `string`)*<a name="attr-url-source_repository"></a>
+
+    The URL pointing to the hosted repository where the function is defined. There are supported Cloud Source Repository URLs in the following formats:
+    - To refer to a specific commit: `https://source.developers.google.com/projects/*/repos/*/revisions/*/paths/*`
+    - To refer to a moveable alias (branch): `https://source.developers.google.com/projects/*/repos/*/moveable-aliases/*/paths/*`. To refer to HEAD, use the master moveable alias.
+    - To refer to a specific fixed alias (tag): `https://source.developers.google.com/projects/*/repos/*/fixed-aliases/*/paths/*`
+
+- [**`entry_point`**](#var-entry_point): *(Optional `string`)*<a name="var-entry_point"></a>
 
   Name of the function that will be executed when the Google Cloud Function is triggered.
 
-- **`event_trigger`**: _(`object(event_trigger)`)_
+- [**`event_trigger`**](#var-event_trigger): *(Optional `object(event_trigger)`)*<a name="var-event_trigger"></a>
 
   A source that fires events in response to a condition in another service. Structure is documented below. Cannot be used with `trigger_http`.
 
-  Each `event_trigger` object can have the following fields:
+  The object accepts the following attributes:
 
-  - **`event_type`**: **_(Required `string`)_**
+  - [**`event_type`**](#attr-event_type-event_trigger): *(**Required** `string`)*<a name="attr-event_type-event_trigger"></a>
 
-    The type of event to observe. For example: "google.storage.object.finalize". See the documentation on calling [Cloud Functions](https://cloud.google.com/functions/docs/calling/) for a full reference of accepted triggers.
+    The type of event to observe. For example: `google.storage.object.finalize`. See the documentation on calling [Cloud Functions](https://cloud.google.com/functions/docs/calling/) for a full reference of accepted triggers.
 
-  - **`resource`**: **_(Required `string`)_**
+  - [**`resource`**](#attr-resource-event_trigger): *(**Required** `string`)*<a name="attr-resource-event_trigger"></a>
 
-    The name or partial URI of the resource from which to observe events. For example, "myBucket" or "projects/my-project/topics/my-topic".
+    The name or partial URI of the resource from which to observe events. For example, `myBucket` or `projects/my-project/topics/my-topic`.
 
-  - **`failure_policy`**: _(Optional `object ({retry = optional(bool)})`)_
+  - [**`failure_policy`**](#attr-failure_policy-event_trigger): *(Optional `object(failure_policy)`)*<a name="attr-failure_policy-event_trigger"></a>
 
     Specifies policy for failed executions.
-
+    
     A `failure_policy` object can have the following field:
 
-    - **`retry`**: **_(Required `bool`)_**
+    The object accepts the following attributes:
+
+    - [**`retry`**](#attr-retry-failure_policy-event_trigger): *(**Required** `bool`)*<a name="attr-retry-failure_policy-event_trigger"></a>
 
       Whether the function should be retried on failure.
-      Default is `false`
 
-- **`trigger_http`**: _(Optional `bool`)_
+      Default is `false`.
+
+- [**`trigger_http`**](#var-trigger_http): *(Optional `bool`)*<a name="var-trigger_http"></a>
 
   Boolean variable. Any HTTP request (of a supported type) to the endpoint will trigger function execution. Supported HTTP request types are: `POST`, `PUT`, `GET`, `DELETE`, and `OPTIONS`. Endpoint is returned as `https_trigger_url`. Cannot be used with `event_trigger`.
+
   Default is `false`.
 
-- **`description`**: _(Optional `bool`)_
+- [**`description`**](#var-description): *(Optional `bool`)*<a name="var-description"></a>
 
   The description of the function.
 
-- **`available_memory_mb`**: _(Optional `number`)_
+- [**`timeout`**](#var-timeout): *(Optional `number`)*<a name="var-timeout"></a>
+
+  (Optional) Timeout (in seconds) for the function. Cannot be more than `540` seconds.
+
+  Default is `60`.
+
+- [**`available_memory_mb`**](#var-available_memory_mb): *(Optional `number`)*<a name="var-available_memory_mb"></a>
 
   Memory (in MB), available to the function. Possible values include `128`, `256`, `512`, `1024`, etc.
-  
+
   Default is `128`.
 
-- **`max_instances`**: _(Optional `number`)_
+- [**`max_instances`**](#var-max_instances): *(Optional `number`)*<a name="var-max_instances"></a>
 
   The limit on the maximum number of function instances that may coexist at a given time. Setting maximum instances to `0` results in clearing existing maximum instances limits. Setting a `0` value does not pause your function.
 
-- **`ingress_settings`**: _(Optional `string`)_
+- [**`ingress_settings`**](#var-ingress_settings): *(Optional `string`)*<a name="var-ingress_settings"></a>
 
   String value that controls what traffic can reach the function. Allowed values are `ALLOW_ALL`, `ALLOW_INTERNAL_AND_GCLB` and `ALLOW_INTERNAL_ONLY`. Changes to this field will recreate the cloud function.
-  
-  Default is `ALLOW_INTERNAL_ONLY`.
 
-- **`labels`**: _(Optional `map(string)`)_
+  Default is `"ALLOW_INTERNAL_ONLY"`.
+
+- [**`labels`**](#var-labels): *(Optional `map(string)`)*<a name="var-labels"></a>
 
   A set of key/value label pairs to assign to the function. Label keys must follow the requirements at <https://cloud.google.com/resource-manager/docs/creating-managing-labels#requirements>.
+
   Default is `{}`.
 
-- **`service_account_email`**: _(Optional `string`)_
+- [**`service_account_email`**](#var-service_account_email): *(Optional `string`)*<a name="var-service_account_email"></a>
 
   If defined, use the provided service account to run the function.
 
-- **`environment_variables`**: _(Optional `map(string)`)_
+- [**`environment_variables`**](#var-environment_variables): *(Optional `map(string)`)*<a name="var-environment_variables"></a>
 
   A set of key/value environment variable pairs to assign to the function.
-  
+
   Default is `{}`.
 
-- **`build_environment_variables`**: _(Optional `map(string)`)_
+- [**`build_environment_variables`**](#var-build_environment_variables): *(Optional `map(string)`)*<a name="var-build_environment_variables"></a>
 
   A set of key/value environment variable pairs available during build time.
 
-- **`vpc_connector`**: _(Optional `string`)_
+- [**`vpc_connector`**](#var-vpc_connector): *(Optional `string`)*<a name="var-vpc_connector"></a>
 
   The VPC Network Connector that this cloud function can connect to. It should be set up as fully-qualified URI. The format of this field is `projects/*/locations/*/connectors/*`.
 
-- **`vpc_connector_egress_settings`**: _(Optional `string`)_
+- [**`vpc_connector_egress_settings`**](#var-vpc_connector_egress_settings): *(Optional `string`)*<a name="var-vpc_connector_egress_settings"></a>
 
   The egress settings for the connector, controlling what traffic is diverted through it. Allowed values are `ALL_TRAFFIC` and `PRIVATE_RANGES_ONLY`.
-  Default is `PRIVATE_RANGES_ONLY`.
+
+  Default is `"PRIVATE_RANGES_ONLY"`.
 
 #### Extended Resource Configuration
 
-- **`iam`**: _(Optional `list(iam)`)_
+- [**`iam`**](#var-iam): *(Optional `list(iam)`)*<a name="var-iam"></a>
 
   A list of IAM access.
 
-  Example
+  Example:
 
   ```hcl
   iam = [{
@@ -202,14 +230,14 @@ See [variables.tf] and [examples/] for details and use-cases.
   }]
   ```
 
-  Each `iam` object accepts the following fields:
+  The object accepts the following attributes:
 
-  - **`members`**: _(Optional `set(string)`)_
+  - [**`members`**](#attr-members-iam): *(Optional `set(string)`)*<a name="attr-members-iam"></a>
 
     Identities that will be granted the privilege in role. Each entry can have one of the following values:
     - `allUsers`: A special identifier that represents anyone who is on the internet; with or without a Google account.
     - `allAuthenticatedUsers`: A special identifier that represents anyone who is authenticated with a Google account or a service account.
-    - `user:{emailid}`: An email address that represents a specific Google account. For example, alice@gmail.com or joe@example.com.
+    - `user:{emailid}`: An email address that represents a specific Google account. For example, alice@example.com or joe@example.com.
     - `serviceAccount:{emailid}`: An email address that represents a service account. For example, my-other-app@appspot.gserviceaccount.com.
     - `group:{emailid}`: An email address that represents a Google group. For example, admins@example.com.
     - `domain:{domain}`: A G Suite domain (primary, instead of alias) name that represents all the users of that domain. For example, google.com or example.com.
@@ -219,21 +247,21 @@ See [variables.tf] and [examples/] for details and use-cases.
 
     Default is `[]`.
 
-  - **`role`**: _(Optional `string`)_
+  - [**`role`**](#attr-role-iam): *(Optional `string`)*<a name="attr-role-iam"></a>
 
     The role that should be applied. Note that custom roles must be of the format `[projects|organizations]/{parent-name}/roles/{role-name}`.
 
-  - **`authoritative`**: _(Optional `bool`)_
+  - [**`authoritative`**](#attr-authoritative-iam): *(Optional `bool`)*<a name="attr-authoritative-iam"></a>
 
     Whether to exclusively set (authoritative mode) or add (non-authoritative/additive mode) members to the role.
 
     Default is `true`.
 
-- **`policy_bindings`**: _(Optional `list(policy_bindings)`)_
+- [**`policy_bindings`**](#var-policy_bindings): *(Optional `list(policy_bindings)`)*<a name="var-policy_bindings"></a>
 
   A list of IAM policy bindings.
 
-  Example
+  Example:
 
   ```hcl
   policy_bindings = [{
@@ -247,23 +275,23 @@ See [variables.tf] and [examples/] for details and use-cases.
   }]
   ```
 
-  Each `policy_bindings` object accepts the following fields:
+  The object accepts the following attributes:
 
-  - **`role`**: **_(Required `string`)_**
+  - [**`role`**](#attr-role-policy_bindings): *(**Required** `string`)*<a name="attr-role-policy_bindings"></a>
 
     The role that should be applied.
 
-  - **`members`**: _(Optional `set(string)`)_
+  - [**`members`**](#attr-members-policy_bindings): *(Optional `set(string)`)*<a name="attr-members-policy_bindings"></a>
 
     Identities that will be granted the privilege in `role`.
 
     Default is `var.members`.
 
-  - **`condition`**: _(Optional `object(condition)`)_
+  - [**`condition`**](#attr-condition-policy_bindings): *(Optional `object(condition)`)*<a name="attr-condition-policy_bindings"></a>
 
     An IAM Condition for a given binding.
 
-    Example
+    Example:
 
     ```hcl
     condition = {
@@ -272,35 +300,35 @@ See [variables.tf] and [examples/] for details and use-cases.
     }
     ```
 
-    A `condition` object accepts the following fields:
+    The object accepts the following attributes:
 
-    - **`expression`**: **_(Required `string`)_**
+    - [**`expression`**](#attr-expression-condition-policy_bindings): *(**Required** `string`)*<a name="attr-expression-condition-policy_bindings"></a>
 
       Textual representation of an expression in Common Expression Language syntax.
 
-    - **`title`**: **_(Required `string`)_**
+    - [**`title`**](#attr-title-condition-policy_bindings): *(**Required** `string`)*<a name="attr-title-condition-policy_bindings"></a>
 
       A title for the expression, i.e. a short string describing its purpose.
 
-    - **`description`**: _(Optional `string`)_
+    - [**`description`**](#attr-description-condition-policy_bindings): *(Optional `string`)*<a name="attr-description-condition-policy_bindings"></a>
 
       An optional description of the expression. This is a longer text which describes the expression, e.g. when hovered over it in a UI.
 
 ##### Google storage archive bucket object
 
-- **`bucket`**: _(Optional `string`)_
+- [**`bucket`**](#var-bucket): *(Optional `string`)*<a name="var-bucket"></a>
 
   The URI of the bucket that the archive that contains the function and its dependencies will be uploaded to.
 
-- **`archive_upload_name`**: _(Optional `string`)_
+- [**`archive_upload_name`**](#var-archive_upload_name): *(Optional `string`)*<a name="var-archive_upload_name"></a>
 
   If provided, this value will overwrite the archive name on upload.  If a specific archive name is requested for the uploaded object, then override the archive name.
 
-- **`source_archive`**: _(Optional `string`)_
+- [**`source_archive`**](#var-source_archive): *(Optional `string`)*<a name="var-source_archive"></a>
 
   Path to the '.zip' archive that contains the source code of this Cloud Function.
 
-## Module Attributes Reference
+## Module Outputs
 
 The following attributes are exported in the outputs of the module:
 
@@ -322,14 +350,16 @@ The following attributes are exported in the outputs of the module:
 
 ## External Documentation
 
-- Google Documentation:
-  - Cloud function: <https://cloud.google.com/functions/docs>
-  - Cloud function REST: <https://cloud.google.com/functions/docs/reference/rest/v1/projects.locations.functions>
-  - Storage bucket object: <https://cloud.google.com/storage/docs/key-terms#objects>
+### Google Documentation
 
-- Terraform Google Provider Documentation:
-  - <https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/cloudfunctions_function>
-  - <https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/storage_bucket_object>
+- Cloud function: <https://cloud.google.com/functions/docs>
+- Cloud function REST: <https://cloud.google.com/functions/docs/reference/rest/v1/projects.locations.functions>
+- Storage bucket object: <https://cloud.google.com/storage/docs/key-terms#objects>
+
+### Terraform Google Provider Documentation
+
+- <https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/cloudfunctions_function>
+- <https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/storage_bucket_object>
 
 ## Module Versioning
 
@@ -379,32 +409,20 @@ Run `make help` to see details on each available target.
 This module is licensed under the Apache License Version 2.0, January 2004.
 Please see [LICENSE] for full details.
 
-Copyright &copy; 2020-2021 [Mineiros GmbH][homepage]
+Copyright &copy; 2020-2022 [Mineiros GmbH][homepage]
 
 
 <!-- References -->
 
 [homepage]: https://mineiros.io/?ref=terraform-google-cloud-function
 [hello@mineiros.io]: mailto:hello@mineiros.io
-
-<!-- markdown-link-check-disable -->
-
 [badge-build]: https://github.com/mineiros-io/terraform-google-cloud-function/workflows/Tests/badge.svg
-
-<!-- markdown-link-check-enable -->
-
 [badge-semver]: https://img.shields.io/github/v/tag/mineiros-io/terraform-google-cloud-function.svg?label=latest&sort=semver
 [badge-license]: https://img.shields.io/badge/license-Apache%202.0-brightgreen.svg
 [badge-terraform]: https://img.shields.io/badge/Terraform-1.x-623CE4.svg?logo=terraform
 [badge-slack]: https://img.shields.io/badge/slack-@mineiros--community-f32752.svg?logo=slack
-
-<!-- markdown-link-check-disable -->
-
 [build-status]: https://github.com/mineiros-io/terraform-google-cloud-function/actions
 [releases-github]: https://github.com/mineiros-io/terraform-google-cloud-function/releases
-
-<!-- markdown-link-check-enable -->
-
 [releases-terraform]: https://github.com/hashicorp/terraform/releases
 [badge-tf-gcp]: https://img.shields.io/badge/google-3.x-1A73E8.svg?logo=terraform
 [releases-google-provider]: https://github.com/terraform-providers/terraform-provider-google/releases
@@ -414,9 +432,6 @@ Copyright &copy; 2020-2021 [Mineiros GmbH][homepage]
 [cloud-function]: https://cloud.google.com/functions
 [gcp]: https://cloud.google.com/
 [semantic versioning (semver)]: https://semver.org/
-
-<!-- markdown-link-check-disable -->
-
 [variables.tf]: https://github.com/mineiros-io/terraform-google-cloud-function/blob/main/variables.tf
 [examples/]: https://github.com/mineiros-io/terraform-google-cloud-function/blob/main/examples
 [issues]: https://github.com/mineiros-io/terraform-google-cloud-function/issues
@@ -424,5 +439,3 @@ Copyright &copy; 2020-2021 [Mineiros GmbH][homepage]
 [makefile]: https://github.com/mineiros-io/terraform-google-cloud-function/blob/main/Makefile
 [pull requests]: https://github.com/mineiros-io/terraform-google-cloud-function/pulls
 [contribution guidelines]: https://github.com/mineiros-io/terraform-google-cloud-function/blob/main/CONTRIBUTING.md
-
-<!-- markdown-link-check-enable -->
