@@ -462,23 +462,36 @@ section {
     title   = "Module Outputs"
     content = <<-END
       The following attributes are exported in the outputs of the module:
-
-      - **`module_enabled`**
-
-        Whether this module is enabled.
-
-      - **`cloud_function`**
-
-        All outputs of the created `google_cloudfunctions_function` resource.
-
-      - **`bucket_object`**
-
-        All outputs of the created `google_storage_bucket_object.archive` resource.
-
-      - **`iam`**
-
-        The `iam` resource objects that define the access to the cloud function.
     END
+
+    output "module_enabled" {
+      type        = bool
+      description = <<-END
+        Whether this module is enabled.
+      END
+    }
+
+    output "cloud_function" {
+      type        = object(cloud_function)
+      description = <<-END
+        All outputs of the created `google_cloudfunctions_function` resource.
+      END
+    }
+
+    output "bucket_object" {
+      type        = object(bucket_object)
+      description = <<-END
+        All outputs of the created `google_storage_bucket_object.archive`
+        resource.
+      END
+    }
+
+    output "iam" {
+      type        = list(iam)
+      description = <<-END
+        The `iam` resource objects that define the access to the cloud function.
+      END
+    }
   }
 
   section {
