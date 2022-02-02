@@ -342,7 +342,7 @@ The following attributes are exported in the outputs of the module:
 
 - [**`bucket_object`**](#output-bucket_object): *(`object(bucket_object)`)*<a name="output-bucket_object"></a>
 
-  All outputs of the created `google_storage_bucket_object.archive`
+  All outputs of the created `google_storage_bucket_object`
   resource.
 
 - [**`iam`**](#output-iam): *(`list(iam)`)*<a name="output-iam"></a>
