@@ -474,7 +474,7 @@ section {
     output "bucket_object" {
       type        = object(bucket_object)
       description = <<-END
-        All outputs of the created `google_storage_bucket_object.archive`
+        All outputs of the created `google_storage_bucket_object`
         resource.
       END
     }
