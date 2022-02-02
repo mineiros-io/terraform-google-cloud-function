@@ -77,7 +77,7 @@ See [variables.tf] and [examples/] for details and use-cases.
 
   Default is `true`.
 
-- [**`module_depends_on`**](#var-module_depends_on): *(Optional `list(dependencies)`)*<a name="var-module_depends_on"></a>
+- [**`module_depends_on`**](#var-module_depends_on): *(Optional `list(dependency)`)*<a name="var-module_depends_on"></a>
 
   A list of dependencies. Any object can be _assigned_ to this list to define a hidden external dependency.
 
@@ -111,9 +111,9 @@ See [variables.tf] and [examples/] for details and use-cases.
 
   Represents parameters related to source repository where a function is hosted. Cannot be set alongside `source_archive`. For details please see <https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/cloudfunctions_function#source_repository>
 
-  The object accepts the following attributes:
+  The `source_repository` object accepts the following attributes:
 
-  - [**`url`**](#attr-url-source_repository): *(**Required** `string`)*<a name="attr-url-source_repository"></a>
+  - [**`url`**](#attr-source_repository-url): *(**Required** `string`)*<a name="attr-source_repository-url"></a>
 
     The URL pointing to the hosted repository where the function is defined. There are supported Cloud Source Repository URLs in the following formats:
     - To refer to a specific commit: `https://source.developers.google.com/projects/*/repos/*/revisions/*/paths/*`
@@ -128,25 +128,25 @@ See [variables.tf] and [examples/] for details and use-cases.
 
   A source that fires events in response to a condition in another service. Structure is documented below. Cannot be used with `trigger_http`.
 
-  The object accepts the following attributes:
+  The `event_trigger` object accepts the following attributes:
 
-  - [**`event_type`**](#attr-event_type-event_trigger): *(**Required** `string`)*<a name="attr-event_type-event_trigger"></a>
+  - [**`event_type`**](#attr-event_trigger-event_type): *(**Required** `string`)*<a name="attr-event_trigger-event_type"></a>
 
     The type of event to observe. For example: `google.storage.object.finalize`. See the documentation on calling [Cloud Functions](https://cloud.google.com/functions/docs/calling/) for a full reference of accepted triggers.
 
-  - [**`resource`**](#attr-resource-event_trigger): *(**Required** `string`)*<a name="attr-resource-event_trigger"></a>
+  - [**`resource`**](#attr-event_trigger-resource): *(**Required** `string`)*<a name="attr-event_trigger-resource"></a>
 
     The name or partial URI of the resource from which to observe events. For example, `myBucket` or `projects/my-project/topics/my-topic`.
 
-  - [**`failure_policy`**](#attr-failure_policy-event_trigger): *(Optional `object(failure_policy)`)*<a name="attr-failure_policy-event_trigger"></a>
+  - [**`failure_policy`**](#attr-event_trigger-failure_policy): *(Optional `object(failure_policy)`)*<a name="attr-event_trigger-failure_policy"></a>
 
     Specifies policy for failed executions.
-    
+
     A `failure_policy` object can have the following field:
 
-    The object accepts the following attributes:
+    The `failure_policy` object accepts the following attributes:
 
-    - [**`retry`**](#attr-retry-failure_policy-event_trigger): *(**Required** `bool`)*<a name="attr-retry-failure_policy-event_trigger"></a>
+    - [**`retry`**](#attr-event_trigger-failure_policy-retry): *(**Required** `bool`)*<a name="attr-event_trigger-failure_policy-retry"></a>
 
       Whether the function should be retried on failure.
 
@@ -230,9 +230,9 @@ See [variables.tf] and [examples/] for details and use-cases.
   }]
   ```
 
-  The object accepts the following attributes:
+  Each `iam` object in the list accepts the following attributes:
 
-  - [**`members`**](#attr-members-iam): *(Optional `set(string)`)*<a name="attr-members-iam"></a>
+  - [**`members`**](#attr-iam-members): *(Optional `set(string)`)*<a name="attr-iam-members"></a>
 
     Identities that will be granted the privilege in role. Each entry can have one of the following values:
     - `allUsers`: A special identifier that represents anyone who is on the internet; with or without a Google account.
@@ -247,17 +247,17 @@ See [variables.tf] and [examples/] for details and use-cases.
 
     Default is `[]`.
 
-  - [**`role`**](#attr-role-iam): *(Optional `string`)*<a name="attr-role-iam"></a>
+  - [**`role`**](#attr-iam-role): *(Optional `string`)*<a name="attr-iam-role"></a>
 
     The role that should be applied. Note that custom roles must be of the format `[projects|organizations]/{parent-name}/roles/{role-name}`.
 
-  - [**`authoritative`**](#attr-authoritative-iam): *(Optional `bool`)*<a name="attr-authoritative-iam"></a>
+  - [**`authoritative`**](#attr-iam-authoritative): *(Optional `bool`)*<a name="attr-iam-authoritative"></a>
 
     Whether to exclusively set (authoritative mode) or add (non-authoritative/additive mode) members to the role.
 
     Default is `true`.
 
-- [**`policy_bindings`**](#var-policy_bindings): *(Optional `list(policy_bindings)`)*<a name="var-policy_bindings"></a>
+- [**`policy_bindings`**](#var-policy_bindings): *(Optional `list(policy_binding)`)*<a name="var-policy_bindings"></a>
 
   A list of IAM policy bindings.
 
@@ -275,19 +275,19 @@ See [variables.tf] and [examples/] for details and use-cases.
   }]
   ```
 
-  The object accepts the following attributes:
+  Each `policy_binding` object in the list accepts the following attributes:
 
-  - [**`role`**](#attr-role-policy_bindings): *(**Required** `string`)*<a name="attr-role-policy_bindings"></a>
+  - [**`role`**](#attr-policy_bindings-role): *(**Required** `string`)*<a name="attr-policy_bindings-role"></a>
 
     The role that should be applied.
 
-  - [**`members`**](#attr-members-policy_bindings): *(Optional `set(string)`)*<a name="attr-members-policy_bindings"></a>
+  - [**`members`**](#attr-policy_bindings-members): *(Optional `set(string)`)*<a name="attr-policy_bindings-members"></a>
 
     Identities that will be granted the privilege in `role`.
 
     Default is `var.members`.
 
-  - [**`condition`**](#attr-condition-policy_bindings): *(Optional `object(condition)`)*<a name="attr-condition-policy_bindings"></a>
+  - [**`condition`**](#attr-policy_bindings-condition): *(Optional `object(condition)`)*<a name="attr-policy_bindings-condition"></a>
 
     An IAM Condition for a given binding.
 
@@ -300,17 +300,17 @@ See [variables.tf] and [examples/] for details and use-cases.
     }
     ```
 
-    The object accepts the following attributes:
+    The `condition` object accepts the following attributes:
 
-    - [**`expression`**](#attr-expression-condition-policy_bindings): *(**Required** `string`)*<a name="attr-expression-condition-policy_bindings"></a>
+    - [**`expression`**](#attr-policy_bindings-condition-expression): *(**Required** `string`)*<a name="attr-policy_bindings-condition-expression"></a>
 
       Textual representation of an expression in Common Expression Language syntax.
 
-    - [**`title`**](#attr-title-condition-policy_bindings): *(**Required** `string`)*<a name="attr-title-condition-policy_bindings"></a>
+    - [**`title`**](#attr-policy_bindings-condition-title): *(**Required** `string`)*<a name="attr-policy_bindings-condition-title"></a>
 
       A title for the expression, i.e. a short string describing its purpose.
 
-    - [**`description`**](#attr-description-condition-policy_bindings): *(Optional `string`)*<a name="attr-description-condition-policy_bindings"></a>
+    - [**`description`**](#attr-policy_bindings-condition-description): *(Optional `string`)*<a name="attr-policy_bindings-condition-description"></a>
 
       An optional description of the expression. This is a longer text which describes the expression, e.g. when hovered over it in a UI.
 
@@ -332,19 +332,20 @@ See [variables.tf] and [examples/] for details and use-cases.
 
 The following attributes are exported in the outputs of the module:
 
-- **`module_enabled`**
+- [**`module_enabled`**](#output-module_enabled): *(`bool`)*<a name="output-module_enabled"></a>
 
   Whether this module is enabled.
 
-- **`cloud_function`**
+- [**`cloud_function`**](#output-cloud_function): *(`object(cloud_function)`)*<a name="output-cloud_function"></a>
 
   All outputs of the created `google_cloudfunctions_function` resource.
 
-- **`bucket_object`**
+- [**`bucket_object`**](#output-bucket_object): *(`object(bucket_object)`)*<a name="output-bucket_object"></a>
 
-  All outputs of the created `google_storage_bucket_object.archive` resource.
+  All outputs of the created `google_storage_bucket_object`
+  resource.
 
-- **`iam`**
+- [**`iam`**](#output-iam): *(`list(iam)`)*<a name="output-iam"></a>
 
   The `iam` resource objects that define the access to the cloud function.
 

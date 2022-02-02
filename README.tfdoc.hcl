@@ -99,8 +99,7 @@ section {
         }
 
         variable "module_depends_on" {
-          type           = any
-          readme_type    = "list(dependencies)"
+          type           = list(dependency)
           description    = <<-END
             A list of dependencies. Any object can be _assigned_ to this list to define a hidden external dependency.
           END
@@ -148,8 +147,7 @@ section {
         }
 
         variable "source_repository" {
-          type        = any
-          readme_type = "object(source_repository)"
+          type        = object(source_repository)
           description = <<-END
             Represents parameters related to source repository where a function is hosted. Cannot be set alongside `source_archive`. For details please see <https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/cloudfunctions_function#source_repository>
           END
@@ -174,8 +172,7 @@ section {
         }
 
         variable "event_trigger" {
-          type        = any
-          readme_type = "object(event_trigger)"
+          type        = object(event_trigger)
           description = <<-END
             A source that fires events in response to a condition in another service. Structure is documented below. Cannot be used with `trigger_http`.
           END
@@ -197,8 +194,7 @@ section {
           }
 
           attribute "failure_policy" {
-            type        = any
-            readme_type = "object(failure_policy)"
+            type        = object(failure_policy)
             description = <<-END
               Specifies policy for failed executions.
 
@@ -312,8 +308,7 @@ section {
         title = "Extended Resource Configuration"
 
         variable "iam" {
-          type           = any
-          readme_type    = "list(iam)"
+          type           = list(iam)
           description    = <<-END
             A list of IAM access.
           END
@@ -359,8 +354,7 @@ section {
         }
 
         variable "policy_bindings" {
-          type           = any
-          readme_type    = "list(policy_bindings)"
+          type           = list(policy_binding)
           description    = <<-END
             A list of IAM policy bindings.
           END
@@ -393,8 +387,7 @@ section {
           }
 
           attribute "condition" {
-            type           = any
-            readme_type    = "object(condition)"
+            type           = object(condition)
             description    = <<-END
               An IAM Condition for a given binding.
             END
@@ -462,23 +455,36 @@ section {
     title   = "Module Outputs"
     content = <<-END
       The following attributes are exported in the outputs of the module:
-
-      - **`module_enabled`**
-
-        Whether this module is enabled.
-
-      - **`cloud_function`**
-
-        All outputs of the created `google_cloudfunctions_function` resource.
-
-      - **`bucket_object`**
-
-        All outputs of the created `google_storage_bucket_object.archive` resource.
-
-      - **`iam`**
-
-        The `iam` resource objects that define the access to the cloud function.
     END
+
+    output "module_enabled" {
+      type        = bool
+      description = <<-END
+        Whether this module is enabled.
+      END
+    }
+
+    output "cloud_function" {
+      type        = object(cloud_function)
+      description = <<-END
+        All outputs of the created `google_cloudfunctions_function` resource.
+      END
+    }
+
+    output "bucket_object" {
+      type        = object(bucket_object)
+      description = <<-END
+        All outputs of the created `google_storage_bucket_object`
+        resource.
+      END
+    }
+
+    output "iam" {
+      type        = list(iam)
+      description = <<-END
+        The `iam` resource objects that define the access to the cloud function.
+      END
+    }
   }
 
   section {
