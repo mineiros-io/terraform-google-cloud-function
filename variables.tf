@@ -139,6 +139,18 @@ variable "vpc_connector_egress_settings" {
   default     = "PRIVATE_RANGES_ONLY"
 }
 
+variable "secret_environment_variables" {
+  description = "(Optional) Secret environment variables configuration."
+  type        = any
+  # object({
+  #   key        = string
+  #   project_id = string
+  #   secret     = string
+  #   version    = string
+  # })
+  default = []
+}
+
 ## IAM
 
 variable "iam" {

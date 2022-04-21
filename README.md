@@ -214,6 +214,28 @@ See [variables.tf] and [examples/] for details and use-cases.
 
   Default is `"PRIVATE_RANGES_ONLY"`.
 
+- [**`secret_environment_variables`**](#var-secret_environment_variables): *(Optional `object(secret_environment_variables)`)*<a name="var-secret_environment_variables"></a>
+
+  Secret environment variables configuration.
+
+  The `secret_environment_variables` object accepts the following attributes:
+
+  - [**`key`**](#attr-secret_environment_variables-key): *(**Required** `string`)*<a name="attr-secret_environment_variables-key"></a>
+
+    Name of the environment variable.
+
+  - [**`project_id`**](#attr-secret_environment_variables-project_id): *(Optional `string`)*<a name="attr-secret_environment_variables-project_id"></a>
+
+    Project identifier (due to a known limitation, only project number is supported by this field) of the project that contains the secret. If not set, it will be populated with the function's project, assuming that the secret exists in the same project as of the function.
+
+  - [**`secret`**](#attr-secret_environment_variables-secret): *(**Required** `string`)*<a name="attr-secret_environment_variables-secret"></a>
+
+    ID of the secret in secret manager (not the full resource name).
+
+  - [**`version`**](#attr-secret_environment_variables-version): *(**Required** `string`)*<a name="attr-secret_environment_variables-version"></a>
+
+    Version of the secret (version number or the string "latest"). It is recommended to use a numeric version for secret environment variables as any updates to the secret value is not reflected until new clones start.
+
 #### Extended Resource Configuration
 
 - [**`iam`**](#var-iam): *(Optional `list(iam)`)*<a name="var-iam"></a>

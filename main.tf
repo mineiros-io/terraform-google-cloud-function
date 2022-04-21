@@ -56,5 +56,16 @@ resource "google_cloudfunctions_function" "function" {
     }
   }
 
+  dynamic "secret_environment_variables" {
+    for_each = var.secret_environment_variables
+
+    content {
+      key        = var.secret_environment_variables.key
+      project_id = try(var.secret_environment_variables.project_id, null)
+      secret     = var.secret_environment_variables.secret
+      version    = var.secret_environment_variables.version
+    }
+  }
+
   depends_on = [var.module_depends_on]
 }
