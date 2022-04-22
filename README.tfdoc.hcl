@@ -467,6 +467,7 @@ section {
 
           variable "bucket" {
             type        = string
+            required    = true
             description = <<-END
               The URI of the bucket that the archive that contains the function and its dependencies will be uploaded to.
             END
@@ -481,6 +482,7 @@ section {
 
           variable "source_archive" {
             type        = string
+            required    = true
             description = <<-END
               Path to the '.zip' archive that contains the source code of this Cloud Function.
             END

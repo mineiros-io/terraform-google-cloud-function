@@ -338,7 +338,7 @@ See [variables.tf] and [examples/] for details and use-cases.
 
 ##### Google storage archive bucket object
 
-- [**`bucket`**](#var-bucket): *(Optional `string`)*<a name="var-bucket"></a>
+- [**`bucket`**](#var-bucket): *(**Required** `string`)*<a name="var-bucket"></a>
 
   The URI of the bucket that the archive that contains the function and its dependencies will be uploaded to.
 
@@ -346,7 +346,7 @@ See [variables.tf] and [examples/] for details and use-cases.
 
   If provided, this value will overwrite the archive name on upload.  If a specific archive name is requested for the uploaded object, then override the archive name.
 
-- [**`source_archive`**](#var-source_archive): *(Optional `string`)*<a name="var-source_archive"></a>
+- [**`source_archive`**](#var-source_archive): *(**Required** `string`)*<a name="var-source_archive"></a>
 
   Path to the '.zip' archive that contains the source code of this Cloud Function.
 
