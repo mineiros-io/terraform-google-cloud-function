@@ -23,30 +23,30 @@ variable "runtime" {
   type        = string
 }
 
+variable "source_archive" {
+  description = "(Required) Path to the '.zip' archive that contains the source code of this Cloud Function."
+  type        = string
+}
+
+variable "bucket" {
+  description = "(Required) The URI of the bucket that the archive that contains the function and its dependencies will be uploaded to."
+  type        = string
+}
+
 # ---------------------------------------------------------------------------------------------------------------------
 # OPTIONAL VARIABLES
 # These variables have defaults, but may be overridden.
 # ---------------------------------------------------------------------------------------------------------------------
 
-variable "source_archive" {
-  description = "(Optional) Path to the '.zip' archive that contains the source code of this Cloud Function."
-  default     = null
-}
-
 variable "archive_upload_name" {
   description = "(Optional) If provided, this value will overwrite the archive name on upload."
+  type        = string
   default     = null
 }
 
 variable "source_repository" {
   description = "(Optional) Represents parameters related to source repository where a function is hosted. Cannot be set alongside 'source_archive'. For details please see https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/cloudfunctions_function#source_repository"
   type        = object({ url = string })
-  default     = null
-}
-
-variable "bucket" {
-  description = "(Optional) The URI of the bucket that the archive that contains the function and its dependencies will be uploaded to."
-  type        = string
   default     = null
 }
 
@@ -71,11 +71,13 @@ variable "event_trigger" {
 
 variable "description" {
   description = "(Optional) The description of the function."
+  type        = string
   default     = null
 }
 
 variable "available_memory_mb" {
   description = "(Optional) Memory (in MB), available to the function. Possible values include 128, 256, 512, 1024, etc."
+  type        = number
   default     = 128
 }
 
@@ -137,6 +139,18 @@ variable "vpc_connector_egress_settings" {
   description = "(Optional) The egress settings for the connector, controlling what traffic is diverted through it. Allowed values are 'ALL_TRAFFIC' and 'PRIVATE_RANGES_ONLY'."
   type        = string
   default     = "PRIVATE_RANGES_ONLY"
+}
+
+variable "secret_environment_variables" {
+  description = "(Optional) Secret environment variables configuration."
+  type        = any
+  # object({
+  #   key        = string
+  #   project_id = string
+  #   secret     = string
+  #   version    = string
+  # })
+  default = []
 }
 
 ## IAM

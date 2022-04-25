@@ -302,6 +302,45 @@ section {
             The egress settings for the connector, controlling what traffic is diverted through it. Allowed values are `ALL_TRAFFIC` and `PRIVATE_RANGES_ONLY`.
           END
         }
+
+        variable "secret_environment_variables" {
+          type        = object(secret_environment_variables)
+          description = <<-END
+            Secret environment variables configuration.
+          END
+
+          attribute "key" {
+            required    = true
+            type        = string
+            description = <<-END
+              Name of the environment variable.
+            END
+          }
+
+          attribute "project_id" {
+            required    = false
+            type        = string
+            description = <<-END
+              Project identifier (due to a known limitation, only project number is supported by this field) of the project that contains the secret. If not set, it will be populated with the function's project, assuming that the secret exists in the same project as of the function.
+            END
+          }
+
+          attribute "secret" {
+            required    = true
+            type        = string
+            description = <<-END
+              ID of the secret in secret manager (not the full resource name).
+            END
+          }
+
+          attribute "version" {
+            required    = true
+            type        = string
+            description = <<-END
+              Version of the secret (version number or the string "latest"). It is recommended to use a numeric version for secret environment variables as any updates to the secret value is not reflected until new clones start.
+            END
+          }
+        }
       }
 
       section {
@@ -428,6 +467,7 @@ section {
 
           variable "bucket" {
             type        = string
+            required    = true
             description = <<-END
               The URI of the bucket that the archive that contains the function and its dependencies will be uploaded to.
             END
@@ -442,6 +482,7 @@ section {
 
           variable "source_archive" {
             type        = string
+            required    = true
             description = <<-END
               Path to the '.zip' archive that contains the source code of this Cloud Function.
             END
