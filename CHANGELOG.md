@@ -7,11 +7,27 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.1.0]
+
+### Added
+
+- Add support for secret environment variables
+
+### Changed
+
+- Increased minimum provider version to 4.18 to support secret environment variables
+- Internal: Add test suite
+- Internal: Add terradoc documentation
+
+### Fixed
+
+- Internal: Fix terraform `tomap()` issues when internally converting types
+
 ## [0.0.2]
 
 ### Added
 
-- Support for provider 4.x
+- Add Support for provider 4.x
 
 ## [0.0.1]
 
@@ -21,7 +37,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 <!-- markdown-link-check-disable -->
 
-[unreleased]: https://github.com/mineiros-io/terraform-google-cloud-function/compare/v0.0.2...HEAD
+[unreleased]: https://github.com/mineiros-io/terraform-google-cloud-function/compare/v0.1.0...HEAD
+[0.1.0]: https://github.com/mineiros-io/terraform-google-cloud-function/compare/v0.0.2...v0.1.0
 [0.0.2]: https://github.com/mineiros-io/terraform-google-cloud-function/compare/v0.0.1...v0.0.2
 [0.0.1]: https://github.com/mineiros-io/terraform-google-cloud-function/releases/tag/v0.0.1
 
