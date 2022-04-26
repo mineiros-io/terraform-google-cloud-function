@@ -55,8 +55,8 @@ Most basic usage just setting required arguments:
 module "terraform-google-cloud-function" {
   source = "github.com/mineiros-io/terraform-google-cloud-function.git?ref=v0.0.2"
 
-  project     = google_cloudfunctions_function.function.project
-  region      = google_cloudfunctions_function.function.region
+  project     = "my-project"
+  region      = "europe-west3"
   name        = "function-test"
   description = "My function"
   runtime     = "nodejs14"
