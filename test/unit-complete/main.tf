@@ -60,12 +60,19 @@ module "test" {
 
   vpc_connector = "some-connector"
 
-  secret_environment_variables = {
-    key        = "some-key"
-    project_id = "012345"
-    secret     = "some-secret"
-    version    = "3"
-  }
+  secret_environment_variables = [
+    {
+      key        = "var_a"
+      project_id = "my-project"
+      secret     = "my-secret"
+      version    = "3"
+    },
+    {
+      key     = "var_b"
+      secret  = "my-other-secret"
+      version = "3"
+    }
+  ]
 
   # add most/all other optional arguments
 }
