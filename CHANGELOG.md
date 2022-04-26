@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.1.1]
+
+### Fixed
+
+- Fix type of `secret_environment_variables` to be list of secrets
+
 ## [0.1.0]
 
 ### Added
@@ -37,7 +43,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 <!-- markdown-link-check-disable -->
 
-[unreleased]: https://github.com/mineiros-io/terraform-google-cloud-function/compare/v0.1.0...HEAD
+[unreleased]: https://github.com/mineiros-io/terraform-google-cloud-function/compare/v0.1.1...HEAD
+[0.1.1]: https://github.com/mineiros-io/terraform-google-cloud-function/compare/v0.1.0...v0.1.1
 [0.1.0]: https://github.com/mineiros-io/terraform-google-cloud-function/compare/v0.0.2...v0.1.0
 [0.0.2]: https://github.com/mineiros-io/terraform-google-cloud-function/compare/v0.0.1...v0.0.2
 [0.0.1]: https://github.com/mineiros-io/terraform-google-cloud-function/releases/tag/v0.0.1

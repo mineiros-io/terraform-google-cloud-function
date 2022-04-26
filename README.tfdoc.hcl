@@ -66,7 +66,7 @@ section {
 
       ```hcl
       module "terraform-google-cloud-function" {
-        source = "github.com/mineiros-io/terraform-google-cloud-function.git?ref=v0.1.0"
+        source = "github.com/mineiros-io/terraform-google-cloud-function.git?ref=v0.1.1"
 
         project     = "my-project"
         region      = "europe-west3"
