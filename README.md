@@ -53,7 +53,7 @@ Most basic usage just setting required arguments:
 
 ```hcl
 module "terraform-google-cloud-function" {
-  source = "github.com/mineiros-io/terraform-google-cloud-function.git?ref=v0.0.2"
+  source = "github.com/mineiros-io/terraform-google-cloud-function.git?ref=v0.1.0"
 
   project     = "my-project"
   region      = "europe-west3"
