@@ -60,10 +60,10 @@ resource "google_cloudfunctions_function" "function" {
     for_each = var.secret_environment_variables
 
     content {
-      key        = var.secret_environment_variables.key
-      project_id = try(var.secret_environment_variables.project_id, null)
-      secret     = var.secret_environment_variables.secret
-      version    = var.secret_environment_variables.version
+      key        = secret_environment_variables.value.key
+      project_id = try(secret_environment_variables.value.project_id, null)
+      secret     = secret_environment_variables.value.secret
+      version    = secret_environment_variables.value.version
     }
   }
 

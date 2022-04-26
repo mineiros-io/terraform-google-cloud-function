@@ -304,9 +304,24 @@ section {
         }
 
         variable "secret_environment_variables" {
-          type        = object(secret_environment_variables)
-          description = <<-END
+          type           = list(secret_environment_variables)
+          description    = <<-END
             Secret environment variables configuration.
+          END
+          readme_example = <<-END
+            secret_environment_variables = [
+              {
+                key        = "var_a"
+                project_id = "my-project"
+                secret     = "my-secret"
+                version    = "3"
+              },
+              {
+                key     = "var_b"
+                secret  = "my-other-secret"
+                version = "3"
+              }
+            ]
           END
 
           attribute "key" {

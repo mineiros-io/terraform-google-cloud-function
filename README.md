@@ -214,11 +214,29 @@ See [variables.tf] and [examples/] for details and use-cases.
 
   Default is `"PRIVATE_RANGES_ONLY"`.
 
-- [**`secret_environment_variables`**](#var-secret_environment_variables): *(Optional `object(secret_environment_variables)`)*<a name="var-secret_environment_variables"></a>
+- [**`secret_environment_variables`**](#var-secret_environment_variables): *(Optional `list(secret_environment_variables)`)*<a name="var-secret_environment_variables"></a>
 
   Secret environment variables configuration.
 
-  The `secret_environment_variables` object accepts the following attributes:
+  Example:
+
+  ```hcl
+  secret_environment_variables = [
+    {
+      key        = "var_a"
+      project_id = "my-project"
+      secret     = "my-secret"
+      version    = "3"
+    },
+    {
+      key     = "var_b"
+      secret  = "my-other-secret"
+      version = "3"
+    }
+  ]
+  ```
+
+  Each `secret_environment_variables` object in the list accepts the following attributes:
 
   - [**`key`**](#attr-secret_environment_variables-key): *(**Required** `string`)*<a name="attr-secret_environment_variables-key"></a>
 
