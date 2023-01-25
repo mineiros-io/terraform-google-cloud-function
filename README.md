@@ -107,11 +107,11 @@ See [variables.tf] and [examples/] for details and use-cases.
 
   The runtime in which the function is going to run. Eg. `nodejs10`, `nodejs12`, `nodejs14`, `python37`, `python38`, `python39`, `dotnet3`, `go113`, `java11`, `ruby27`, etc.
 
-- [**`source_repository`**](#var-source_repository): *(Optional `object(source_repository)`)*<a name="var-source_repository"></a>
+- [**`source_repository`**](#var-source_repository): *(Optional `any`)*<a name="var-source_repository"></a>
 
   Represents parameters related to source repository where a function is hosted. Cannot be set alongside `source_archive`. For details please see <https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/cloudfunctions_function#source_repository>
 
-  The `source_repository` object accepts the following attributes:
+  The object accepts the following attributes:
 
   - [**`url`**](#attr-source_repository-url): *(**Required** `string`)*<a name="attr-source_repository-url"></a>
 
@@ -158,7 +158,7 @@ See [variables.tf] and [examples/] for details and use-cases.
 
   Default is `false`.
 
-- [**`description`**](#var-description): *(Optional `bool`)*<a name="var-description"></a>
+- [**`description`**](#var-description): *(Optional `string`)*<a name="var-description"></a>
 
   The description of the function.
 
@@ -450,7 +450,7 @@ Run `make help` to see details on each available target.
 This module is licensed under the Apache License Version 2.0, January 2004.
 Please see [LICENSE] for full details.
 
-Copyright &copy; 2020-2022 [Mineiros GmbH][homepage]
+Copyright &copy; 2020-2023 [Mineiros GmbH][homepage]
 
 
 <!-- References -->

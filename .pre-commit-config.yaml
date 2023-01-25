@@ -1,16 +1,28 @@
 repos:
   - repo: https://github.com/mineiros-io/pre-commit-hooks
-    rev: v0.4.1
+    rev: v0.4.3
     hooks:
+      - id: phony-targets
+      - id: terradoc-validate
+      - id: terradoc-fmt
+        require_serial: true
+      - id: terradoc-generate
+      - id: terramate-generate
       - id: terraform-fmt
       - id: terraform-validate
         exclude: ^examples|.terraform/
       - id: tflint
-      - id: phony-targets
-      - id: terradoc-validate
-      - id: terradoc-fmt
-      - id: terradoc-generate
-      - id: terramate-generate
-      - id: markdown-link-check
-        args: ['-p']   # When adding the -p flag, markdown-link-check will always with an exit code 0, even if dead links are found
-        verbose: true  # Forces the output of the hook to be printed even when the hook passes.
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.4.0
+    hooks:
+      - id: trailing-whitespace
+        args: [--markdown-linebreak-ext=md]
+      - id: check-yaml
+        args: [--allow-multiple-documents]
+      - id: detect-private-key
+      - id: end-of-file-fixer
+  - repo: https://github.com/adrienverge/yamllint
+    rev: v1.29.0
+    hooks:
+      - id: yamllint
+        args: ['-s']

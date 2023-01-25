@@ -4,4 +4,5 @@ stack {
     This module tests an empty set of features.
     The purpose of this test is to verify no resources are created when the module is disabled.
   EOD
+  tags        = ["test"]
 }

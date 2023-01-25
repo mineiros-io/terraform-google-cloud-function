@@ -14,4 +14,5 @@ module "test" {
   source_archive = "/tmp/source-archive.zip"
 
   bucket = "storage_bucket"
+
 }
