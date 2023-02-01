@@ -22,8 +22,8 @@ secure, and production-grade cloud infrastructure.
 - [Getting Started](#getting-started)
 - [Module Argument Reference](#module-argument-reference)
   - [Top-level Arguments](#top-level-arguments)
-    - [Module Configuration](#module-configuration)
     - [Main Resource Configuration](#main-resource-configuration)
+    - [Module Configuration](#module-configuration)
     - [Extended Resource Configuration](#extended-resource-configuration)
       - [Google storage archive bucket object](#google-storage-archive-bucket-object)
 - [Module Outputs](#module-outputs)
@@ -68,26 +68,6 @@ module "terraform-google-cloud-function" {
 See [variables.tf] and [examples/] for details and use-cases.
 
 ### Top-level Arguments
-
-#### Module Configuration
-
-- [**`module_enabled`**](#var-module_enabled): *(Optional `bool`)*<a name="var-module_enabled"></a>
-
-  Specifies whether resources in the module will be created.
-
-  Default is `true`.
-
-- [**`module_depends_on`**](#var-module_depends_on): *(Optional `list(dependency)`)*<a name="var-module_depends_on"></a>
-
-  A list of dependencies. Any object can be _assigned_ to this list to define a hidden external dependency.
-
-  Example:
-
-  ```hcl
-  module_depends_on = [
-    google_network.network
-  ]
-  ```
 
 #### Main Resource Configuration
 
@@ -254,6 +234,26 @@ See [variables.tf] and [examples/] for details and use-cases.
 
     Version of the secret (version number or the string "latest"). It is recommended to use a numeric version for secret environment variables as any updates to the secret value is not reflected until new clones start.
 
+#### Module Configuration
+
+- [**`module_enabled`**](#var-module_enabled): *(Optional `bool`)*<a name="var-module_enabled"></a>
+
+  Specifies whether resources in the module will be created.
+
+  Default is `true`.
+
+- [**`module_depends_on`**](#var-module_depends_on): *(Optional `list(dependency)`)*<a name="var-module_depends_on"></a>
+
+  A list of dependencies. Any object can be _assigned_ to this list to define a hidden external dependency.
+
+  Example:
+
+  ```hcl
+  module_depends_on = [
+    google_network.network
+  ]
+  ```
+
 #### Extended Resource Configuration
 
 - [**`iam`**](#var-iam): *(Optional `list(iam)`)*<a name="var-iam"></a>
@@ -284,6 +284,7 @@ See [variables.tf] and [examples/] for details and use-cases.
     - `projectOwner:projectid`: Owners of the given project. For example, `projectOwner:my-example-project`
     - `projectEditor:projectid`: Editors of the given project. For example, `projectEditor:my-example-project`
     - `projectViewer:projectid`: Viewers of the given project. For example, `projectViewer:my-example-project`
+    - `computed:{identifier}`: An existing key from `var.computed_members_map`.
 
     Default is `[]`.
 
@@ -296,6 +297,12 @@ See [variables.tf] and [examples/] for details and use-cases.
     Whether to exclusively set (authoritative mode) or add (non-authoritative/additive mode) members to the role.
 
     Default is `true`.
+
+- [**`computed_members_map`**](#var-computed_members_map): *(Optional `map(string)`)*<a name="var-computed_members_map"></a>
+
+  A map of members to replace in `members` of various IAM settings to handle terraform computed values.
+
+  Default is `{}`.
 
 - [**`policy_bindings`**](#var-policy_bindings): *(Optional `list(policy_binding)`)*<a name="var-policy_bindings"></a>
 
