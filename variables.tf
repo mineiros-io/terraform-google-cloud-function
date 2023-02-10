@@ -46,7 +46,7 @@ variable "archive_upload_name" {
 
 variable "source_repository" {
   description = "(Optional) Represents parameters related to source repository where a function is hosted. Cannot be set alongside 'source_archive'. For details please see https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/cloudfunctions_function#source_repository"
-  type        = object({ url = string })
+  type        = any
   default     = null
 }
 

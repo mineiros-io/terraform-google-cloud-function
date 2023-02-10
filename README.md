@@ -158,7 +158,7 @@ See [variables.tf] and [examples/] for details and use-cases.
 
   Default is `false`.
 
-- [**`description`**](#var-description): *(Optional `bool`)*<a name="var-description"></a>
+- [**`description`**](#var-description): *(Optional `string`)*<a name="var-description"></a>
 
   The description of the function.
 
@@ -450,7 +450,7 @@ Run `make help` to see details on each available target.
 This module is licensed under the Apache License Version 2.0, January 2004.
 Please see [LICENSE] for full details.
 
-Copyright &copy; 2020-2022 [Mineiros GmbH][homepage]
+Copyright &copy; 2020-2023 [Mineiros GmbH][homepage]
 
 
 <!-- References -->
