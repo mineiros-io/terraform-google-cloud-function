@@ -221,7 +221,7 @@ section {
         }
 
         variable "description" {
-          type        = bool
+          type        = string
           description = <<-END
             The description of the function.
           END
@@ -631,7 +631,7 @@ section {
       This module is licensed under the Apache License Version 2.0, January 2004.
       Please see [LICENSE] for full details.
 
-      Copyright &copy; 2020-2022 [Mineiros GmbH][homepage]
+      Copyright &copy; 2020-2023 [Mineiros GmbH][homepage]
     END
   }
 }
