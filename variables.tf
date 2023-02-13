@@ -159,12 +159,48 @@ variable "iam" {
   description = "(Optional) A list of IAM access."
   type        = any
   default     = []
+
+  # validate required keys in each object
+  validation {
+    condition     = alltrue([for x in var.iam : length(setintersection(keys(x), ["role", "roles", "members"])) == 2])
+    error_message = "Each object in var.iam must specify a role(s) and a set of members."
+  }
+
+  # validate no invalid keys are in each object
+  validation {
+    condition     = alltrue([for x in var.iam : length(setsubtract(keys(x), ["role", "roles", "members", "authoritative", "condition"])) == 0])
+    error_message = "Each object in var.iam does only support role, roles, members, authoritative and condition attributes."
+  }
 }
+
 
 variable "policy_bindings" {
   description = "(Optional) A list of IAM policy bindings."
   type        = any
   default     = null
+
+  # validate required keys in each object
+  validation {
+    condition     = var.policy_bindings == null ? true : alltrue([for x in var.policy_bindings : length(setintersection(keys(x), ["role", "members"])) == 2])
+    error_message = "Each object in var.policy_bindings must specify a role and a set of members."
+  }
+
+  # validate no invalid keys are in each object
+  validation {
+    condition     = var.policy_bindings == null ? true : alltrue([for x in var.policy_bindings : length(setsubtract(keys(x), ["role", "members", "condition"])) == 0])
+    error_message = "Each object in var.policy_bindings does only support role, members and condition attributes."
+  }
+}
+
+variable "computed_members_map" {
+  type        = map(string)
+  description = "(Optional) A map of members to replace in 'members' to handle terraform computed values. Will be ignored when policy bindings are used."
+  default     = {}
+
+  validation {
+    condition     = alltrue([for k, v in var.computed_members_map : can(regex("^(allUsers|allAuthenticatedUsers|(user|serviceAccount|group|domain|projectOwner|projectEditor|projectViewer):)", v))])
+    error_message = "The value must be a non-empty string being a valid principal type identified with `allUsers`, `allAuthenticatedUsers` or prefixed with `user:`, `serviceAccount:`, `group:`, `domain:`, `projectOwner:`, `projectEditor:` or `projectViewer:`."
+  }
 }
 
 # ------------------------------------------------------------------------------
@@ -174,12 +210,12 @@ variable "policy_bindings" {
 
 variable "module_enabled" {
   type        = bool
-  description = "(Optional) Whether to create resources within the module or not. Default is 'true'."
+  description = "(Optional) Whether to create resources within the module or not."
   default     = true
 }
 
 variable "module_depends_on" {
   type        = any
-  description = "(Optional) A list of external resources the module depends_on. Default is '[]'."
+  description = "(Optional) A list of external resources the module depends_on."
   default     = []
 }

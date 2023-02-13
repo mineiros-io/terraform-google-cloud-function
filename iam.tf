@@ -1,26 +1,45 @@
 locals {
-  iam_map = var.policy_bindings == null ? { for iam in var.iam : iam.role => iam } : {}
+  # filter all objects that define a single role
+  iam_role = [for iam in var.iam : iam if can(iam.role)]
 
-  policy_bindings = var.policy_bindings != null ? {
-    iam_policy = {
-      policy_bindings = var.policy_bindings
-    }
-  } : {}
+  # filter all objects that define multiple roles and expand them to single roles
+  iam_roles = flatten([for iam in var.iam :
+    [for role in iam.roles : merge(iam, { role = role })] if can(iam.roles)
+  ])
+
+  iam = concat(local.iam_role, local.iam_roles)
+
+  iam_map = { for idx, iam in local.iam :
+    try(iam._key, iam.role) => iam
+  }
 }
 
 module "iam" {
-  source = "github.com/mineiros-io/terraform-google-cloud-function-iam.git?ref=v0.0.2"
+  source = "github.com/mineiros-io/terraform-google-cloud-function-iam?ref=v0.1.0"
 
-  for_each = var.policy_bindings != null ? local.policy_bindings : local.iam_map
+  for_each = [local.iam_map, {}][var.policy_bindings == null ? 0 : 1]
 
   module_enabled    = var.module_enabled
   module_depends_on = var.module_depends_on
 
-  cloud_function  = google_cloudfunctions_function.function[0].name
-  region          = google_cloudfunctions_function.function[0].region
-  project         = google_cloudfunctions_function.function[0].project
-  role            = try(each.value.role, null)
-  members         = try(each.value.members, null)
-  authoritative   = try(each.value.authoritative, true)
-  policy_bindings = try(each.value.policy_bindings, null)
+  cloud_function = google_cloudfunctions_function.function[0].name
+
+  role                 = each.value.role
+  members              = try(each.value.members, [])
+  computed_members_map = var.computed_members_map
+  authoritative        = try(each.value.authoritative, true)
+}
+
+module "policy_bindings" {
+  source = "github.com/mineiros-io/terraform-google-cloud-function-iam?ref=v0.1.0"
+
+  count = var.policy_bindings != null ? 1 : 0
+
+  module_enabled    = var.module_enabled
+  module_depends_on = var.module_depends_on
+
+  cloud_function = google_cloudfunctions_function.function[0].name
+
+  policy_bindings      = var.policy_bindings
+  computed_members_map = var.computed_members_map
 }

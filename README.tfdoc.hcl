@@ -87,29 +87,7 @@ section {
     section {
       title = "Top-level Arguments"
 
-      section {
-        title = "Module Configuration"
 
-        variable "module_enabled" {
-          type        = bool
-          default     = true
-          description = <<-END
-            Specifies whether resources in the module will be created.
-          END
-        }
-
-        variable "module_depends_on" {
-          type           = list(dependency)
-          description    = <<-END
-            A list of dependencies. Any object can be _assigned_ to this list to define a hidden external dependency.
-          END
-          readme_example = <<-END
-            module_depends_on = [
-              google_network.network
-            ]
-          END
-        }
-      }
 
       section {
         title = "Main Resource Configuration"
@@ -147,7 +125,7 @@ section {
         }
 
         variable "source_repository" {
-          type        = object(source_repository)
+          type        = any
           description = <<-END
             Represents parameters related to source repository where a function is hosted. Cannot be set alongside `source_archive`. For details please see <https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/cloudfunctions_function#source_repository>
           END
@@ -359,6 +337,30 @@ section {
       }
 
       section {
+        title = "Module Configuration"
+
+        variable "module_enabled" {
+          type        = bool
+          default     = true
+          description = <<-END
+            Specifies whether resources in the module will be created.
+          END
+        }
+
+        variable "module_depends_on" {
+          type           = list(dependency)
+          description    = <<-END
+            A list of dependencies. Any object can be _assigned_ to this list to define a hidden external dependency.
+          END
+          readme_example = <<-END
+            module_depends_on = [
+              google_network.network
+            ]
+          END
+        }
+      }
+
+      section {
         title = "Extended Resource Configuration"
 
         variable "iam" {
@@ -388,6 +390,7 @@ section {
               - `projectOwner:projectid`: Owners of the given project. For example, `projectOwner:my-example-project`
               - `projectEditor:projectid`: Editors of the given project. For example, `projectEditor:my-example-project`
               - `projectViewer:projectid`: Viewers of the given project. For example, `projectViewer:my-example-project`
+              - `computed:{identifier}`: An existing key from `var.computed_members_map`.
             END
           }
 
@@ -405,6 +408,14 @@ section {
               Whether to exclusively set (authoritative mode) or add (non-authoritative/additive mode) members to the role.
             END
           }
+        }
+
+        variable "computed_members_map" {
+          type        = map(string)
+          description = <<-END
+            A map of members to replace in `members` of various IAM settings to handle terraform computed values.
+          END
+          default     = {}
         }
 
         variable "policy_bindings" {
@@ -506,6 +517,8 @@ section {
       }
     }
   }
+
+
 
   section {
     title   = "Module Outputs"
